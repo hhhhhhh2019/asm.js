@@ -31,7 +31,7 @@ const split = function (str, sep, delEmpty = false) {
         res.push(tmp);
     return res;
 };
-const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor".split(" ");
+const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor call ret".split(" ");
 const operationsWith2Param = "mov add sub cmp or and xor".split(" ");
 class Compiler {
     constructor(code) {
@@ -129,6 +129,9 @@ class Compiler {
             if (str == "m")
                 return 4;
         }
+        if (this.labels[str + ":"] == null) {
+            throw new Error(`Что это?(в позиции ${this.offset})`);
+        }
         return this.labels[str + ":"];
     }
     syntax() {
@@ -143,7 +146,7 @@ class Compiler {
                 // 1 - 18
                 if (token.value == "mov") {
                     let to = this.require("Register", "Memory");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 1;
                     else if (to.value == "b")
@@ -171,7 +174,7 @@ class Compiler {
                 // 19 - 20
                 if (token.value == "push") {
                     cmdNumber = 19;
-                    let what = this.require("Number", "Registrer");
+                    let what = this.require("Number", "Register");
                     if (what.type == "Number")
                         cmdNumber += 0;
                     else if (what.type = "Register")
@@ -183,7 +186,7 @@ class Compiler {
                 // 21
                 if (token.value == "pop") {
                     cmdNumber = 21;
-                    let what = this.require("Registrer");
+                    let what = this.require("Register");
                     this.program.push(cmdNumber);
                     this.program.push(this.nmrl2num(what.value));
                     continue;
@@ -191,7 +194,7 @@ class Compiler {
                 // 22 - 36
                 if (token.value == "add") {
                     let to = this.require("Register");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 22;
                     else if (to.value == "b")
@@ -217,7 +220,7 @@ class Compiler {
                 // 37 - 51
                 if (token.value == "sub") {
                     let to = this.require("Register");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 37;
                     else if (to.value == "b")
@@ -243,7 +246,7 @@ class Compiler {
                 // 52 - 66
                 if (token.value == "cmp") {
                     let to = this.require("Register");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 52;
                     else if (to.value == "b")
@@ -309,7 +312,7 @@ class Compiler {
                 // 72 - 86
                 if (token.value == "or") {
                     let to = this.require("Register");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 72;
                     else if (to.value == "b")
@@ -335,7 +338,7 @@ class Compiler {
                 // 87 - 101
                 if (token.value == "and") {
                     let to = this.require("Register");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 87;
                     else if (to.value == "b")
@@ -361,7 +364,7 @@ class Compiler {
                 // 102 - 116
                 if (token.value == "xor") {
                     let to = this.require("Register");
-                    let what = this.require("Number", "Registrer", "Memory", "Label");
+                    let what = this.require("Number", "Register", "Memory", "Label");
                     if (to.value == "a")
                         cmdNumber = 102;
                     else if (to.value == "b")
@@ -382,6 +385,18 @@ class Compiler {
                         cmdNumber += 2;
                     this.program.push(cmdNumber);
                     this.program.push(this.nmrl2num(what.value));
+                    continue;
+                }
+                // 117
+                if (token.value == "call") {
+                    let what = this.require("Memory", "Label");
+                    this.program.push(117);
+                    this.program.push(this.nmrl2num(what.value));
+                    continue;
+                }
+                // 118
+                if (token.value == "ret") {
+                    this.program.push(118);
                     continue;
                 }
             }
