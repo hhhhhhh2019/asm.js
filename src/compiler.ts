@@ -33,7 +33,7 @@ const split = function(str: String | string, sep: Array<String>, delEmpty: boole
 	return res;
 }
 
-const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor".split(" ");
+const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor call ret".split(" ");
 const operationsWith2Param = "mov add sub cmp or and xor".split(" ");
 
 export class Compiler {
@@ -137,6 +137,9 @@ export class Compiler {
 			if (str == "c") return 2;
 			if (str == "d") return 3;
 			if (str == "m") return 4;
+		}
+		if (this.labels[<string>str + ":"] == null) {
+			throw new Error(`Что это?(в позиции ${this.offset})`);
 		}
 		return this.labels[<string>str + ":"];
 	}
@@ -376,6 +379,21 @@ export class Compiler {
 
 					this.program.push(cmdNumber);
 					this.program.push(this.nmrl2num(what.value));
+					continue;
+				}
+				
+				// 117
+				if (token.value == "call") {
+					let what = this.require("Memory", "Label");
+					
+					this.program.push(117);
+					this.program.push(this.nmrl2num(what.value));
+					continue;
+				}
+				
+				// 118
+				if (token.value == "ret") {
+					this.program.push(118);
 					continue;
 				}
 			}

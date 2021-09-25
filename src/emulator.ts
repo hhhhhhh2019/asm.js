@@ -179,16 +179,16 @@ export class Emulator {
 		// push num
 		if (this.memory[this.programCounter] == 19) {
 			this.programCounter++;
-			this.memory[this.programSize + this.memory[this.programSize]] = this.memory[this.programCounter];
 			this.memory[this.programSize] += 1;
+			this.memory[this.programSize + this.memory[this.programSize]] = this.memory[this.programCounter];
 			this.programCounter++;
 			return;
 		}
 		// push reg
 		if (this.memory[this.programCounter] == 20) {
 			this.programCounter++;
-			this.memory[this.programSize + this.memory[this.programSize]] = this.registers[this.programCounter];
 			this.memory[this.programSize] += 1;
+			this.memory[this.programSize + this.memory[this.programSize]] = this.registers[this.programCounter];
 			this.programCounter++;
 			return;
 		}
@@ -1022,7 +1022,6 @@ export class Emulator {
 			this.programCounter++;
 			return;
 		}
-
 		// xor M reg
 		if (this.memory[this.programCounter] == 115) {
 			this.programCounter++;
@@ -1030,7 +1029,6 @@ export class Emulator {
 			this.programCounter++;
 			return;
 		}
-
 		// xor M mem
 		if (this.memory[this.programCounter] == 116) {
 			this.programCounter++;
@@ -1038,14 +1036,28 @@ export class Emulator {
 			this.programCounter++;
 			return;
 		}
+		
+		// call
+		if (this.memory[this.programCounter] == 117) {
+			this.programCounter++;
+			let what = this.memory[this.programCounter];
+			this.memory[this.programSize] += 1;
+			this.memory[this.programSize + this.memory[this.programSize]] = this.programCounter + 1;
+			this.programCounter = what;
+		}
+		
+		// ret
+		if (this.memory[this.programCounter] == 118) {
+			let what = this.memory[this.programSize + this.memory[this.programSize]];
+			this.memory[this.programSize] -= 1;
+			this.programCounter = what + 1;
+		}
 	}
 
 	run() {
 		this.running = true;
-		while (this.running) {
-			//console.log("s: " + this.programCounter);
+		while (this.running && this.programCounter != null && !isNaN(this.programCounter)) {
 			this.step();
-			//console.log("e: " + this.programCounter);
 			if (this.programCounter > this.globalMemory - this.stackSize) this.running = false;
 		}
 	}
