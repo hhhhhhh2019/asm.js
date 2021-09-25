@@ -59,7 +59,6 @@ export class Emulator {
 
 		// mov B num
 		if (this.memory[this.programCounter] == 4) {
-			console.log(this.memory[this.programCounter+1])
 			this.programCounter++;
 			this.registers[1] = this.memory[this.programCounter];
 			this.programCounter++;
