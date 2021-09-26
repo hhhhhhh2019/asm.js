@@ -161,7 +161,7 @@ class Compiler {
                         cmdNumber = 16;
                     if (what.type == "Number")
                         cmdNumber += 0;
-                    else if (what.type = "Register")
+                    else if (what.type == "Register")
                         cmdNumber += 1;
                     else if (what.type == "Memory")
                         cmdNumber += 2;
@@ -177,7 +177,7 @@ class Compiler {
                     let what = this.require("Number", "Register");
                     if (what.type == "Number")
                         cmdNumber += 0;
-                    else if (what.type = "Register")
+                    else if (what.type == "Register")
                         cmdNumber += 1;
                     this.program.push(cmdNumber);
                     this.program.push(this.nmrl2num(what.value));
@@ -207,7 +207,7 @@ class Compiler {
                         cmdNumber = 34;
                     if (what.type == "Number")
                         cmdNumber += 0;
-                    else if (what.type = "Register")
+                    else if (what.type == "Register")
                         cmdNumber += 1;
                     else if (what.type == "Memory")
                         cmdNumber += 2;
@@ -233,7 +233,7 @@ class Compiler {
                         cmdNumber = 49;
                     if (what.type == "Number")
                         cmdNumber += 0;
-                    else if (what.type = "Register")
+                    else if (what.type == "Register")
                         cmdNumber += 1;
                     else if (what.type == "Memory")
                         cmdNumber += 2;
@@ -400,6 +400,7 @@ class Compiler {
                     continue;
                 }
             }
+            throw new Error(`Что это?(${token.value}, позиция ${this.offset})`);
         }
     }
     compile() {

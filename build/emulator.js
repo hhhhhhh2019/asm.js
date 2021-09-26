@@ -2,24 +2,37 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Emulator = void 0;
 class Emulator {
-    constructor(memory, stackSize) {
+    constructor(prMemory, stackSize) {
         this.memory = new Uint8Array(0);
         this.registers = new Uint8Array([0, 0, 0, 0, 0]);
         this.flags = new Uint8Array(2); // one unsigned 8 bit number
         this.programCounter = 0;
         this.running = false;
-        this.globalMemory = memory + 1;
         this.stackSize = stackSize + 1;
-        this.programSize = this.globalMemory - stackSize - 1;
-        this.memoryArr = new Array(memory);
-        this.memoryArr.fill(0);
+        this.globalMemory = prMemory + this.stackSize;
+        this.programSize = prMemory;
     }
     setProgram(prg) {
+        let memoryArr = new Array(this.globalMemory);
+        memoryArr.fill(0);
+        memoryArr[this.programSize] = this.programSize;
         for (let i = 0; i < this.globalMemory - this.stackSize; i++) {
-            this.memoryArr[i] = prg[i];
+            memoryArr[i] = prg[i];
         }
-        this.memory = new Uint8Array(this.memoryArr);
+        this.memory = new Uint8Array(memoryArr);
         this.programCounter = 0;
+    }
+    push(val) {
+        this.memory[this.programSize] += 1;
+        this.memory[this.memory[this.programSize]] = val;
+        console.log("push ", val);
+    }
+    pop() {
+        let res = this.memory[this.memory[this.programSize]];
+        console.log("pop ", res);
+        this.memory[this.memory[this.programSize]] = 0;
+        this.memory[this.programSize] -= 1;
+        return res;
     }
     step() {
         // brk
@@ -133,7 +146,10 @@ class Emulator {
         // mov M reg
         if (this.memory[this.programCounter] == 14) {
             this.programCounter++;
-            this.registers[4] = this.registers[this.programCounter];
+            if (this.registers[this.programCounter] = 4)
+                this.registers[4] = this.memory[this.registers[4]];
+            else
+                this.registers[4] = this.registers[this.programCounter];
             this.programCounter++;
             return;
         }
@@ -168,24 +184,21 @@ class Emulator {
         // push num
         if (this.memory[this.programCounter] == 19) {
             this.programCounter++;
-            this.memory[this.programSize] += 1;
-            this.memory[this.programSize + this.memory[this.programSize]] = this.memory[this.programCounter];
+            this.push(this.memory[this.programCounter]);
             this.programCounter++;
             return;
         }
         // push reg
         if (this.memory[this.programCounter] == 20) {
             this.programCounter++;
-            this.memory[this.programSize] += 1;
-            this.memory[this.programSize + this.memory[this.programSize]] = this.registers[this.programCounter];
+            this.push(this.registers[this.memory[this.programCounter]]);
             this.programCounter++;
             return;
         }
         // pop reg
         if (this.memory[this.programCounter] == 21) {
             this.programCounter++;
-            this.registers[this.programCounter] = this.memory[this.programSize + this.memory[this.programSize]];
-            this.memory[this.programSize] -= 1;
+            this.registers[this.memory[this.programCounter]] = this.pop();
             this.programCounter++;
             return;
         }
@@ -1025,20 +1038,20 @@ class Emulator {
         if (this.memory[this.programCounter] == 117) {
             this.programCounter++;
             let what = this.memory[this.programCounter];
-            this.memory[this.programSize] += 1;
-            this.memory[this.programSize + this.memory[this.programSize]] = this.programCounter + 1;
+            this.push(this.programCounter + 1);
             this.programCounter = what;
+            return;
         }
         // ret
         if (this.memory[this.programCounter] == 118) {
-            let what = this.memory[this.programSize + this.memory[this.programSize]];
-            this.memory[this.programSize] -= 1;
-            this.programCounter = what + 1;
+            this.programCounter = this.pop();
+            return;
         }
     }
     run() {
         this.running = true;
         while (this.running && this.programCounter != null && !isNaN(this.programCounter)) {
+            console.log(this);
             this.step();
             if (this.programCounter > this.globalMemory - this.stackSize)
                 this.running = false;
