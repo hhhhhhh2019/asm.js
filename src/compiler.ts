@@ -167,7 +167,7 @@ export class Compiler {
 					else /*memory*/           cmdNumber = 16;
 
 					if (what.type == "Number")       cmdNumber += 0;
-					else if (what.type = "Register") cmdNumber += 1;
+					else if (what.type == "Register") cmdNumber += 1;
 					else if (what.type == "Memory")  cmdNumber += 2;
 					else if (what.type == "Label")   cmdNumber += 2;
 
@@ -183,7 +183,7 @@ export class Compiler {
 					let what = this.require("Number", "Register");
 
 					if (what.type == "Number")       cmdNumber += 0;
-					else if (what.type = "Register") cmdNumber += 1;
+					else if (what.type == "Register") cmdNumber += 1;
 
 					this.program.push(cmdNumber);
 					this.program.push(this.nmrl2num(what.value));
@@ -213,7 +213,7 @@ export class Compiler {
 					else if (to.value == "m") cmdNumber = 34;
 
 					if (what.type == "Number")       cmdNumber += 0;
-					else if (what.type = "Register") cmdNumber += 1;
+					else if (what.type == "Register") cmdNumber += 1;
 					else if (what.type == "Memory")  cmdNumber += 2;
 					else if (what.type == "Label")   cmdNumber += 2;
 
@@ -234,7 +234,7 @@ export class Compiler {
 					else if (to.value == "m") cmdNumber = 49;
 
 					if (what.type == "Number")       cmdNumber += 0;
-					else if (what.type = "Register") cmdNumber += 1;
+					else if (what.type == "Register") cmdNumber += 1;
 					else if (what.type == "Memory")  cmdNumber += 2;
 					else if (what.type == "Label")   cmdNumber += 2;
 
@@ -397,6 +397,8 @@ export class Compiler {
 					continue;
 				}
 			}
+
+			throw new Error(`Что это?(${token.value}, позиция ${this.offset})`);
 		}
 	}
 
