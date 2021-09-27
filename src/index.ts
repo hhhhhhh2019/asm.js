@@ -4,7 +4,7 @@ import { Emulator } from "./emulator";
 const code = `
 	jmp start
 
-var: db 1h 2h 3h 0h
+var: db 72h 69h 76h 76h 89h 0h
 
 strlen:
 	push M
@@ -16,8 +16,8 @@ strlen:
 
 strlenLabel:
 	mov A M
-	add M 1h
 	add B 1h
+	add M 1h
 	cmp A 0h
 	jne strlenLabel
 
