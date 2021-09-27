@@ -34,7 +34,7 @@ const split = function(str: String | string, sep: Array<String>, delEmpty: boole
 }
 
 const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor call ret db".split(" ");
-const operationsWith2Param = "mov add sub cmp or and xor db".split(" ");
+const operationsWith2Param = "mov add sub cmp or and xor db offset".split(" ");
 
 export class Compiler {
 	code: string | String;

@@ -6,15 +6,33 @@ const code = `
 
 var: db 1h 2h 3h 0h
 
-start:
-	mov M offset var
+strlen:
+	push M
+	push B
 
-l1:
+	mov M stack
+	sub M 3h
+	mov M M
+
+strlenLabel:
 	mov A M
 	add M 1h
+	add B 1h
 	cmp A 0h
-	jne l1
-	
+	jne strlenLabel
+
+	sub B 1h
+	mov A B
+
+	pop B
+	pop M
+ret
+
+start:
+	push offset var
+	call strlen
+	pop D
+
 	brk
 
 stack:
