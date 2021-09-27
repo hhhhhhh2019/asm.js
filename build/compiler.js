@@ -32,7 +32,7 @@ const split = function (str, sep, delEmpty = false) {
     return res;
 };
 const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor call ret db".split(" ");
-const operationsWith2Param = "mov add sub cmp or and xor db".split(" ");
+const operationsWith2Param = "mov add sub cmp or and xor db offset".split(" ");
 class Compiler {
     constructor(code) {
         this.program = [];

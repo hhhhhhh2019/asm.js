@@ -23,13 +23,12 @@ class Emulator {
         this.programCounter = 0;
     }
     push(val) {
+        console.log("push ", val);
         this.memory[this.programSize] += 1;
         this.memory[this.memory[this.programSize]] = val;
-        console.log("push ", val);
     }
     pop() {
         let res = this.memory[this.memory[this.programSize]];
-        console.log("pop ", res);
         this.memory[this.memory[this.programSize]] = 0;
         this.memory[this.programSize] -= 1;
         return res;
@@ -50,10 +49,10 @@ class Emulator {
         // mov A reg
         if (this.memory[this.programCounter] == 2) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[0] = this.memory[this.registers[4]];
             else
-                this.registers[0] = this.registers[this.programCounter];
+                this.registers[0] = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -74,10 +73,10 @@ class Emulator {
         // mov B reg
         if (this.memory[this.programCounter] == 5) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[1] = this.memory[this.registers[4]];
             else
-                this.registers[1] = this.registers[this.programCounter];
+                this.registers[1] = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -98,10 +97,10 @@ class Emulator {
         // mov C reg
         if (this.memory[this.programCounter] == 8) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[2] = this.memory[this.registers[4]];
             else
-                this.registers[2] = this.registers[this.programCounter];
+                this.registers[2] = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -122,10 +121,10 @@ class Emulator {
         // mov D reg
         if (this.memory[this.programCounter] == 11) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[3] = this.memory[this.registers[4]];
             else
-                this.registers[3] = this.registers[this.programCounter];
+                this.registers[3] = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -146,10 +145,13 @@ class Emulator {
         // mov M reg
         if (this.memory[this.programCounter] == 14) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4) {
+                console.log(this.memory[this.registers[4]]);
                 this.registers[4] = this.memory[this.registers[4]];
+                console.log(this.registers[4]);
+            }
             else
-                this.registers[4] = this.registers[this.programCounter];
+                this.registers[4] = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -170,7 +172,7 @@ class Emulator {
         // mov mem reg
         if (this.memory[this.programCounter] == 17) {
             this.programCounter++;
-            this.memory[this.programCounter] = this.registers[this.programCounter];
+            this.memory[this.programCounter] = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -212,10 +214,10 @@ class Emulator {
         // add A reg
         if (this.memory[this.programCounter] == 23) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[0] += this.memory[this.registers[4]];
             else
-                this.registers[0] += this.registers[this.programCounter];
+                this.registers[0] += this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -236,10 +238,10 @@ class Emulator {
         // add B reg
         if (this.memory[this.programCounter] == 26) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[1] += this.memory[this.registers[4]];
             else
-                this.registers[1] += this.registers[this.programCounter];
+                this.registers[1] += this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -260,10 +262,10 @@ class Emulator {
         // add C reg
         if (this.memory[this.programCounter] == 29) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[2] += this.memory[this.registers[4]];
             else
-                this.registers[2] += this.registers[this.programCounter];
+                this.registers[2] += this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -284,10 +286,10 @@ class Emulator {
         // add D reg
         if (this.memory[this.programCounter] == 32) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[3] += this.memory[this.registers[4]];
             else
-                this.registers[3] += this.registers[this.programCounter];
+                this.registers[3] += this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -308,10 +310,10 @@ class Emulator {
         // add M reg
         if (this.memory[this.programCounter] == 35) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[4] += this.memory[this.registers[4]];
             else
-                this.registers[4] += this.registers[this.programCounter];
+                this.registers[4] += this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -332,10 +334,10 @@ class Emulator {
         // sub A reg
         if (this.memory[this.programCounter] == 38) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[0] -= this.memory[this.registers[4]];
             else
-                this.registers[0] -= this.registers[this.programCounter];
+                this.registers[0] -= this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -356,10 +358,10 @@ class Emulator {
         // sub B reg
         if (this.memory[this.programCounter] == 41) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[1] -= this.memory[this.registers[4]];
             else
-                this.registers[1] -= this.registers[this.programCounter];
+                this.registers[1] -= this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -380,10 +382,10 @@ class Emulator {
         // sub C reg
         if (this.memory[this.programCounter] == 44) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[2] -= this.memory[this.registers[4]];
             else
-                this.registers[2] -= this.registers[this.programCounter];
+                this.registers[2] -= this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -404,10 +406,10 @@ class Emulator {
         // sub D reg
         if (this.memory[this.programCounter] == 47) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[3] -= this.memory[this.registers[4]];
             else
-                this.registers[3] -= this.registers[this.programCounter];
+                this.registers[3] -= this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -428,10 +430,10 @@ class Emulator {
         // sub M reg
         if (this.memory[this.programCounter] == 50) {
             this.programCounter++;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 this.registers[4] -= this.memory[this.registers[4]];
             else
-                this.registers[4] -= this.registers[this.programCounter];
+                this.registers[4] -= this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -460,10 +462,10 @@ class Emulator {
         if (this.memory[this.programCounter] == 53) {
             this.programCounter++;
             let res = 0;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 res = this.memory[this.registers[4]];
             else
-                res = this.registers[this.programCounter];
+                res = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             if (this.registers[0] == res)
                 this.flags[0] = 1;
@@ -507,10 +509,10 @@ class Emulator {
         if (this.memory[this.programCounter] == 56) {
             this.programCounter++;
             let res = 0;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 res = this.memory[this.registers[4]];
             else
-                res = this.registers[this.programCounter];
+                res = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             if (this.registers[1] == res)
                 this.flags[0] = 1;
@@ -554,10 +556,10 @@ class Emulator {
         if (this.memory[this.programCounter] == 59) {
             this.programCounter++;
             let res = 0;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 res = this.memory[this.registers[4]];
             else
-                res = this.registers[this.programCounter];
+                res = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             if (this.registers[2] == res)
                 this.flags[0] = 1;
@@ -601,10 +603,10 @@ class Emulator {
         if (this.memory[this.programCounter] == 62) {
             this.programCounter++;
             let res = 0;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 res = this.memory[this.registers[4]];
             else
-                res = this.registers[this.programCounter];
+                res = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             if (this.registers[3] == res)
                 this.flags[0] = 1;
@@ -648,10 +650,10 @@ class Emulator {
         if (this.memory[this.programCounter] == 65) {
             this.programCounter++;
             let res = 0;
-            if (this.registers[this.programCounter] = 4)
+            if (this.registers[this.memory[this.programCounter]] = 4)
                 res = this.memory[this.registers[4]];
             else
-                res = this.registers[this.programCounter];
+                res = this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             if (this.registers[4] == res)
                 this.flags[0] = 1;
@@ -729,7 +731,7 @@ class Emulator {
         // or A reg
         if (this.memory[this.programCounter] == 73) {
             this.programCounter++;
-            this.registers[0] = this.registers[0] | this.registers[this.programCounter];
+            this.registers[0] = this.registers[0] | this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -750,7 +752,7 @@ class Emulator {
         // or B reg
         if (this.memory[this.programCounter] == 76) {
             this.programCounter++;
-            this.registers[1] = this.registers[1] | this.registers[this.programCounter];
+            this.registers[1] = this.registers[1] | this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -771,7 +773,7 @@ class Emulator {
         // or C reg
         if (this.memory[this.programCounter] == 79) {
             this.programCounter++;
-            this.registers[2] = this.registers[2] | this.registers[this.programCounter];
+            this.registers[2] = this.registers[2] | this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -792,7 +794,7 @@ class Emulator {
         // or D reg
         if (this.memory[this.programCounter] == 82) {
             this.programCounter++;
-            this.registers[3] = this.registers[3] | this.registers[this.programCounter];
+            this.registers[3] = this.registers[3] | this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -813,7 +815,7 @@ class Emulator {
         // or M reg
         if (this.memory[this.programCounter] == 85) {
             this.programCounter++;
-            this.registers[4] = this.registers[4] | this.registers[this.programCounter];
+            this.registers[4] = this.registers[4] | this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -834,7 +836,7 @@ class Emulator {
         // and A reg
         if (this.memory[this.programCounter] == 88) {
             this.programCounter++;
-            this.registers[0] = this.registers[0] & this.registers[this.programCounter];
+            this.registers[0] = this.registers[0] & this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -855,7 +857,7 @@ class Emulator {
         // and B reg
         if (this.memory[this.programCounter] == 91) {
             this.programCounter++;
-            this.registers[1] = this.registers[1] & this.registers[this.programCounter];
+            this.registers[1] = this.registers[1] & this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -876,7 +878,7 @@ class Emulator {
         // and C reg
         if (this.memory[this.programCounter] == 94) {
             this.programCounter++;
-            this.registers[2] = this.registers[2] & this.registers[this.programCounter];
+            this.registers[2] = this.registers[2] & this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -897,7 +899,7 @@ class Emulator {
         // and D reg
         if (this.memory[this.programCounter] == 97) {
             this.programCounter++;
-            this.registers[3] = this.registers[3] & this.registers[this.programCounter];
+            this.registers[3] = this.registers[3] & this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -918,7 +920,7 @@ class Emulator {
         // and M reg
         if (this.memory[this.programCounter] == 100) {
             this.programCounter++;
-            this.registers[4] = this.registers[4] & this.registers[this.programCounter];
+            this.registers[4] = this.registers[4] & this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -939,7 +941,7 @@ class Emulator {
         // xor A reg
         if (this.memory[this.programCounter] == 103) {
             this.programCounter++;
-            this.registers[0] = this.registers[0] ^ this.registers[this.programCounter];
+            this.registers[0] = this.registers[0] ^ this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -960,7 +962,7 @@ class Emulator {
         // xor B reg
         if (this.memory[this.programCounter] == 106) {
             this.programCounter++;
-            this.registers[1] = this.registers[1] ^ this.registers[this.programCounter];
+            this.registers[1] = this.registers[1] ^ this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -981,7 +983,7 @@ class Emulator {
         // xor C reg
         if (this.memory[this.programCounter] == 109) {
             this.programCounter++;
-            this.registers[2] = this.registers[2] ^ this.registers[this.programCounter];
+            this.registers[2] = this.registers[2] ^ this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -1002,7 +1004,7 @@ class Emulator {
         // xor D reg
         if (this.memory[this.programCounter] == 112) {
             this.programCounter++;
-            this.registers[3] = this.registers[3] ^ this.registers[this.programCounter];
+            this.registers[3] = this.registers[3] ^ this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
@@ -1023,7 +1025,7 @@ class Emulator {
         // xor M reg
         if (this.memory[this.programCounter] == 115) {
             this.programCounter++;
-            this.registers[4] = this.registers[4] ^ this.registers[this.programCounter];
+            this.registers[4] = this.registers[4] ^ this.registers[this.memory[this.programCounter]];
             this.programCounter++;
             return;
         }
