@@ -33,8 +33,8 @@ const split = function(str: String | string, sep: Array<String>, delEmpty: boole
 	return res;
 }
 
-const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor call ret".split(" ");
-const operationsWith2Param = "mov add sub cmp or and xor".split(" ");
+const operations = "brk mov push pop add sub cmp jmp je jne jl jb or and xor call ret db".split(" ");
+const operationsWith2Param = "mov add sub cmp or and xor db".split(" ");
 
 export class Compiler {
 	code: string | String;
@@ -82,6 +82,7 @@ export class Compiler {
 		if (this.isMemory(str)) return "Memory";
 		if (this.isRegister(str)) return "Register";
 		if (this.isOperation(str)) return "Operation";
+		if (str == "offset") return "Offset";
 		return "Label";
 	}
 
@@ -145,11 +146,25 @@ export class Compiler {
 	}
 
 	syntax() {
+		let variable = false;
+		
 		while(this.offset < this.tokens.length) {
 			let token = this.getNextToken();
 			let cmdNumber = 0;
+			
+			if (variable && token.type == "Number") {
+				this.program.push(this.nmrl2num(token.value));
+				continue;
+			}
 
 			if (token.type == "Operation") {
+				variable = false;
+				
+				if (token.value == "db") {
+					variable = true;
+					continue;
+				}
+				
 				if (token.value == "brk") {
 					this.program.push(cmdNumber);
 					continue;
@@ -157,7 +172,7 @@ export class Compiler {
 				// 1 - 18
 				if (token.value == "mov") {
 					let to = this.require("Register", "Memory");
-					let what = this.require("Number", "Register", "Memory", "Label");
+					let what = this.require("Number", "Register", "Memory", "Label", "Offset");
 
 					if (to.value == "a")      cmdNumber = 1;
 					else if (to.value == "b") cmdNumber = 4;
@@ -170,6 +185,9 @@ export class Compiler {
 					else if (what.type == "Register") cmdNumber += 1;
 					else if (what.type == "Memory")  cmdNumber += 2;
 					else if (what.type == "Label")   cmdNumber += 2;
+					else if (what.type == "Offset") {cmdNumber += 0;
+						what = this.require("Number", "Register", "Memory", "Label");
+					}
 
 					this.program.push(cmdNumber);
 					this.program.push(this.nmrl2num(what.value));
@@ -180,10 +198,13 @@ export class Compiler {
 				if (token.value == "push") {
 					cmdNumber = 19;
 
-					let what = this.require("Number", "Register");
+					let what = this.require("Number", "Register", "Offset");
 
 					if (what.type == "Number")       cmdNumber += 0;
 					else if (what.type == "Register") cmdNumber += 1;
+					else if (what.type == "Offset") {cmdNumber += 0;
+						what = this.require("Number", "Register", "Memory", "Label");
+					}
 
 					this.program.push(cmdNumber);
 					this.program.push(this.nmrl2num(what.value));

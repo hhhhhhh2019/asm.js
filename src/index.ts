@@ -4,43 +4,17 @@ import { Emulator } from "./emulator";
 const code = `
 	jmp start
 
-func:
-	push M
-	push B
-
-	mov M stack
-	sub M 3h
-	mov A M
-	sub M 1h
-	mov B M
-	add A B
-
-	pop B
-	pop M
-ret
+var: db 1h 2h 3h 0h
 
 start:
-	push 7h
-	push 6h
+	mov M offset var
+
+l1:
+	mov A M
+	add M 1h
+	cmp A 0h
+	jne l1
 	
-	call func
-
-	push A
-	and A 01h
-	cmp A 01h
-	pop A
-	je noEval
-	jne eval
-
-eval:
-	mov B 1h
-	jmp end
-
-noEval:
-	mov B 2h
-	jmp end
-
-end:
 	brk
 
 stack:
